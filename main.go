@@ -13,7 +13,7 @@ import (
 	"github.com/songgao/water"
 )
 
-// Global variables for IP management and clients
+// Global variables for IP management and clients.
 var (
 	ipPool    = []string{"10.0.0.2", "10.0.0.3", "10.0.0.4"} // IP pool
 	clientIPs = make(map[string]string)                      // Map of client ID to assigned IP
@@ -66,7 +66,7 @@ func main() {
 	}
 }
 
-// Helper to configure the TAP device
+// Helper to configure the TAP device.
 func setupTapDevice(ifaceName string) {
 	cmd := exec.Command("sudo", "ip", "addr", "add", "10.0.0.1/24", "dev", ifaceName)
 	if err := cmd.Run(); err != nil {
@@ -95,7 +95,7 @@ func cleanupInactiveClients() {
 	}
 }
 
-// Updated handleClient function with activity tracking
+// Updated handleClient function with activity tracking.
 func handleClient(conn net.Conn, iface *water.Interface) {
 	defer conn.Close()
 
@@ -136,7 +136,7 @@ func handleClient(conn net.Conn, iface *water.Interface) {
 	clientMux.Unlock()
 }
 
-// Helper to check for timeout errors
+// Helper to check for timeout errors.
 func isTimeoutError(err error) bool {
 	netErr, ok := err.(net.Error)
 	return ok && netErr.Timeout()
@@ -196,7 +196,7 @@ func handleTapTraffic(iface *water.Interface) {
 	}
 }
 
-// Parse the packet to determine its destination IP and type
+// Parse the packet to determine its destination IP and type.
 func parsePacket(packet []byte) (net.IP, bool) {
 	parser := gopacket.NewPacket(packet, layers.LayerTypeEthernet, gopacket.Default)
 	ipLayer := parser.Layer(layers.LayerTypeIPv4)
@@ -214,12 +214,12 @@ func parsePacket(packet []byte) (net.IP, bool) {
 	return nil, false
 }
 
-// Check if the IP is the subnet broadcast address
+// Check if the IP is the subnet broadcast address.
 func isBroadcastIP(ip net.IP) bool {
 	return ip.Equal(net.ParseIP("10.0.0.255")) // Example broadcast IP for 10.0.0.0/24
 }
 
-// Forward broadcast packets to all connected clients
+// Forward broadcast packets to all connected clients.
 func broadcastPacket(packet []byte) {
 	clientMux.Lock()
 	defer clientMux.Unlock()
@@ -231,7 +231,7 @@ func broadcastPacket(packet []byte) {
 	}
 }
 
-// Forward unicast packets to the specific client
+// Forward unicast packets to the specific client.
 func unicastPacket(packet []byte, dstIP net.IP) {
 	clientMux.Lock()
 	defer clientMux.Unlock()
