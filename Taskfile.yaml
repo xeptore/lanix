@@ -28,7 +28,7 @@ tasks:
             -buildvcs=true \
             -trimpath \
             -ldflags="-compressdwarf=true -extldflags=-static -s -w -buildid='' -X '{{.COMP_TIME}}'" \
-            -o ./bin/tgtd \
+            -o ./bin/lanix \
             ./cmd
 
   lint:
